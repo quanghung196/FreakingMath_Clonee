@@ -234,20 +234,20 @@ public class PlayActivity extends AppCompatActivity {
         }
     }
 
-    private void loadHighScore(){
+    private void loadHighScore() {
         SharedPreferences myHighScore = getSharedPreferences("MyHighScore", Context.MODE_PRIVATE);
         Gson gson = new Gson();
         String json = myHighScore.getString("score", null);
         Type type = new TypeToken<ArrayList<PlayerModel>>() {
         }.getType();
         playerModels = gson.fromJson(json, type);
-        sortByScore();
+        sortByScore(playerModels);
         int listSize = playerModels.size();
 
-            Log.i("111", "listSize: " + listSize + " atvt2");
+        Log.i("111", "listSize: " + listSize + " atvt2");
 
 
-        if(playerModels == null){
+        if (playerModels == null) {
             playerModels = new ArrayList<>();
         }
     }
@@ -323,24 +323,25 @@ public class PlayActivity extends AppCompatActivity {
         playerModels.add(playerModel);
     }
 
-    private void sortByScore() {
-        playerModels = new ArrayList<>();
-        Collections.sort(playerModels, new Comparator<PlayerModel>() {
-            @Override
-            public int compare(PlayerModel o1, PlayerModel o2) {
-                double score1 = o1.getPlayerScore();
-                double score2 = o2.getPlayerScore();
+    private void sortByScore(ArrayList<PlayerModel> playerModels) {
+        if (playerModels.size() > 1) {
+            Collections.sort(playerModels, new Comparator<PlayerModel>() {
+                @Override
+                public int compare(PlayerModel o1, PlayerModel o2) {
+                    double score1 = o1.getPlayerScore();
+                    double score2 = o2.getPlayerScore();
 
-                if (score1 < score2) {
-                    return -1;
-                } else {
-                    if (score1 == score2) {
-                        return 0;
-                    } else {
+                    if (score1 < score2) {
                         return 1;
+                    } else {
+                        if (score1 == score2) {
+                            return 0;
+                        } else {
+                            return -1;
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
     }
 }

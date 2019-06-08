@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = myHighScore.edit();
         Gson gson = new Gson();
         playerModels.add(new PlayerModel("Quang Hưng", 100));
+        playerModels.add(new PlayerModel("Quang Hưng1", 200));
         String json = gson.toJson(playerModels);
         editor.putString("score", json);
         editor.commit();
@@ -97,12 +98,12 @@ public class MainActivity extends AppCompatActivity {
                     double score2 = o2.getPlayerScore();
 
                     if (score1 < score2) {
-                        return -1;
+                        return 1;
                     } else {
                         if (score1 == score2) {
                             return 0;
                         } else {
-                            return 1;
+                            return -1;
                         }
                     }
                 }
