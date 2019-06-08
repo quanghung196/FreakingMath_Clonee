@@ -3,9 +3,11 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="colorRed">#F44336</color>
+    <color name="colorRed">#D8463B</color>
     <color name="colorPink">#DC95EC</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlue">#33C7DD</color>
     <color name="colorLightGray">#D4D7D8</color>
+    <color name="colorYellow">#FDE745</color>
+    <color name="colorPurple">#9C27B0</color>
 </resources>

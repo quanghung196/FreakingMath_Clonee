@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvPlayerName1;
     private TextView tvPlayerScore1;
     private RecyclerView recycler;
-    private Button btnBack;
     private ImageView imgLeaderBoard;
 
     //oop
@@ -72,29 +71,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void imgLeaderBoard(View view) {
-        //showPopupWindow(imgLeaderBoard);
-        showDialogThemLop(1);
-    }
-
-    //dialog
-    private TextView tvPlayerScore;
-    private EditText edtPlayerName;
-    private Button btnConfirm;
-    //show dialog high score
-    private void showDialogThemLop(int score) {
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.custom_high_score_dialog);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.show();
-
-        tvPlayerScore = dialog.findViewById(R.id.tvPlayerScore);
-        edtPlayerName = dialog.findViewById(R.id.edtPlayerName);
-        btnConfirm = dialog.findViewById(R.id.btnConfirm);
-
-        tvPlayerScore.setText("Player Score: " + score);
-        String playerName = "lala";
+        showPopupWindow(imgLeaderBoard);
     }
 
     private void loadHighScore() {
@@ -150,18 +127,10 @@ public class MainActivity extends AppCompatActivity {
         tvPlayerScore1 = popupView.findViewById(R.id.tvPlayerScore1);
         tvPlayerName1 = popupView.findViewById(R.id.tvPlayerName1);
         recycler = popupView.findViewById(R.id.recycler);
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        RecyclerView.LayoutManager llm = new LinearLayoutManager(this);
         recycler.setLayoutManager(llm);
         loadHighScore();
         setAdapter();
-        btnBack = popupView.findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
-            }
-        });
     }
 
     private void setAdapter() {

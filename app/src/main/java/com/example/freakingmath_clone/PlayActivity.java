@@ -201,15 +201,12 @@ public class PlayActivity extends AppCompatActivity {
         SharedPreferences myHighScore = getSharedPreferences("MyHighScore", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = myHighScore.edit();
         Gson gson = new Gson();
-        if (countHighScore() < 5) {
+        if (countHighScore() < 10) {
             playerModels.add(new PlayerModel("BQH", score));
         } else {
-            if (score > playerModels.get(4).getPlayerScore()) {
-                playerModels.remove(4);
-                playerModels.add(4, new PlayerModel("BQH new", score));
-                for(int i = 0; i <= playerModels.size() -1;i++){
-                    Log.i("111", playerModels.get(i).getPlayerName() + " " + playerModels.get(i).getPlayerScore());
-                }
+            if (score > playerModels.get(9).getPlayerScore()) {
+                playerModels.remove(9);
+                playerModels.add(9, new PlayerModel("BQH new", score));
             }
         }
         String json = gson.toJson(playerModels);
