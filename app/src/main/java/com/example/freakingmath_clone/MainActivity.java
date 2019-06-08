@@ -127,13 +127,14 @@ public class MainActivity extends AppCompatActivity {
         tvPlayerScore1 = popupView.findViewById(R.id.tvPlayerScore1);
         tvPlayerName1 = popupView.findViewById(R.id.tvPlayerName1);
         recycler = popupView.findViewById(R.id.recycler);
-        RecyclerView.LayoutManager llm = new LinearLayoutManager(this);
-        recycler.setLayoutManager(llm);
         loadHighScore();
         setAdapter();
     }
 
     private void setAdapter() {
+        recycler.setHasFixedSize(true);
+        RecyclerView.LayoutManager llm = new LinearLayoutManager(this);
+        recycler.setLayoutManager(llm);
         if (adapter == null) {
             adapter = new LeaderBoard_Adapter(playerModels);
             recycler.setAdapter(adapter);
