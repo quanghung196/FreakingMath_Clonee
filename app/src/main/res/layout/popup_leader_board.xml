@@ -1,30 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cardCornerRadius="10dp">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPink"
-            android:gravity="center"
-            android:padding="5dp"
-            android:text="High Score"
-            android:textColor="@color/colorRed"
-            android:textSize="25dp"
-            android:textStyle="bold" />
+        app:cardCornerRadius="10dp"
+        android:layout_alignParentRight="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvTenThe"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/colorLightGray"
+                android:maxLines="1"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="8dp"
+                android:textAlignment="center"
+                android:text="Leader Board"
+                android:textSize="18dp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:weightSum="3"
@@ -36,16 +44,16 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
+                    android:layout_weight="0.5"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="No"
                     android:textSize="20dp" />
 
                 <TextView
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
+                    android:layout_weight="1.5"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="Name"
@@ -53,7 +61,7 @@
 
                 <TextView
                     android:layout_weight="1"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="Score"
@@ -62,29 +70,22 @@
             </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler"
-                android:layout_marginRight="20dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginRight="20dp"
+                android:id="@+id/recycler"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="300dp">
 
             </android.support.v7.widget.RecyclerView>
 
             <Button
-                android:layout_gravity="center"
-                android:id="@+id/btnCancel"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
+                android:id="@+id/btnBack"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/custom_btn_confirm_background"
-                android:text="Cancel"
                 android:layout_marginBottom="10dp"
-                android:textAllCaps="false" />
-
+                android:layout_gravity="center"
+                android:text="Back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </LinearLayout>
-    </LinearLayout>
-
-
-</android.support.v7.widget.CardView>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

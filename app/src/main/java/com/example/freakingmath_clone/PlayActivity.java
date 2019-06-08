@@ -112,8 +112,6 @@ public class PlayActivity extends AppCompatActivity {
 
         playerModel = new PlayerModel();
 
-        loadHighScore();
-
         tvHighScore.setText("High Score: " + getHighScore());
         tvScore.setText("Score: " + score);
 
@@ -184,9 +182,6 @@ public class PlayActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
 
-                        //Save new high score
-                        saveNewHighScore(score);
-
                         // Back to home activity
                         Intent intent = new Intent(PlayActivity.this, MainActivity.class);
                         startActivity(intent);
@@ -202,32 +197,29 @@ public class PlayActivity extends AppCompatActivity {
     }
 
     private void saveNewHighScore(int score) {
+        loadHighScore();
+        SharedPreferences myHighScore = getSharedPreferences("MyHighScore", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = myHighScore.edit();
+        Gson gson = new Gson();
         if (countHighScore() < 5) {
-            showDialogThemLop(score);
-            SharedPreferences myHighScore = getSharedPreferences("MyHighScore", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = myHighScore.edit();
-            Gson gson = new Gson();
-            String json = gson.toJson(playerModels);
-            editor.putString("score", json);
-            editor.commit();
+            playerModels.add(new PlayerModel("BQH", score));
         } else {
-            loadHighScore();
-            if (score > playerModels.get(5).getPlayerScore()) {
-                playerModels.remove(5);
-                showDialogThemLop(score);
+            if (score > playerModels.get(4).getPlayerScore()) {
+                playerModels.remove(4);
+                playerModels.add(4, new PlayerModel("BQH new", score));
+                for(int i = 0; i <= playerModels.size() -1;i++){
+                    Log.i("111", playerModels.get(i).getPlayerName() + " " + playerModels.get(i).getPlayerScore());
+                }
             }
         }
+        String json = gson.toJson(playerModels);
+        editor.putString("score", json);
+        editor.commit();
     }
 
     private int countHighScore() {
+        loadHighScore();
         if (playerModels.size() > 1) {
-            SharedPreferences myHighScore = getSharedPreferences("MyHighScore", Context.MODE_PRIVATE);
-            Gson gson = new Gson();
-            String json = myHighScore.getString("score", null);
-            Type type = new TypeToken<ArrayList<PlayerModel>>() {
-            }.getType();
-            playerModels = gson.fromJson(json, type);
-
             return playerModels.size();
         } else {
             return 0;
@@ -242,10 +234,6 @@ public class PlayActivity extends AppCompatActivity {
         }.getType();
         playerModels = gson.fromJson(json, type);
         sortByScore(playerModels);
-        int listSize = playerModels.size();
-
-        Log.i("111", "listSize: " + listSize + " atvt2");
-
 
         if (playerModels == null) {
             playerModels = new ArrayList<>();
@@ -253,6 +241,7 @@ public class PlayActivity extends AppCompatActivity {
     }
 
     private int getHighScore() {
+        loadHighScore();
         if (playerModels.size() > 0) {
             return playerModels.get(0).getPlayerScore();
         } else {
@@ -324,7 +313,7 @@ public class PlayActivity extends AppCompatActivity {
     }
 
     private void sortByScore(ArrayList<PlayerModel> playerModels) {
-        if (playerModels.size() > 1) {
+        if (playerModels != null && playerModels.size() > 1) {
             Collections.sort(playerModels, new Comparator<PlayerModel>() {
                 @Override
                 public int compare(PlayerModel o1, PlayerModel o2) {

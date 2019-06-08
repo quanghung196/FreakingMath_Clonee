@@ -5,15 +5,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -30,7 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvPlayerName1;
     private TextView tvPlayerScore1;
     private RecyclerView recycler;
-    private Button btnCancel;
+    private Button btnBack;
+    private ImageView imgLeaderBoard;
 
     //oop
     private PlayerModel playerModel;
@@ -47,18 +57,12 @@ public class MainActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
-        playerModels = new ArrayList<>();
-        SharedPreferences myHighScore = getSharedPreferences("MyHighScore", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = myHighScore.edit();
-        Gson gson = new Gson();
-        playerModels.add(new PlayerModel("Quang Hưng", 100));
-        playerModels.add(new PlayerModel("Quang Hưng1", 200));
-        String json = gson.toJson(playerModels);
-        editor.putString("score", json);
-        editor.commit();
+        init();
 
-        playerModels.clear();
-        loadHighScore();
+    }
+
+    private void init(){
+        imgLeaderBoard = findViewById(R.id.imgLeaderBoard);
     }
 
     public void btnPlay(View view) {
@@ -67,8 +71,30 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    public void btnLeaderBoard(View view) {
-        showDialogThemLop();
+    public void imgLeaderBoard(View view) {
+        //showPopupWindow(imgLeaderBoard);
+        showDialogThemLop(1);
+    }
+
+    //dialog
+    private TextView tvPlayerScore;
+    private EditText edtPlayerName;
+    private Button btnConfirm;
+    //show dialog high score
+    private void showDialogThemLop(int score) {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.custom_high_score_dialog);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+
+        tvPlayerScore = dialog.findViewById(R.id.tvPlayerScore);
+        edtPlayerName = dialog.findViewById(R.id.edtPlayerName);
+        btnConfirm = dialog.findViewById(R.id.btnConfirm);
+
+        tvPlayerScore.setText("Player Score: " + score);
+        String playerName = "lala";
     }
 
     private void loadHighScore() {
@@ -79,10 +105,6 @@ public class MainActivity extends AppCompatActivity {
         }.getType();
         playerModels = gson.fromJson(json, type);
         sortByScore();
-        int listSize = playerModels.size();
-        for (int i = 0; i < listSize; i++) {
-            Log.i("111", playerModels.get(i).getPlayerName() + " " + playerModels.get(i).getPlayerScore() + "\n listSize:" + listSize);
-        }
 
         if (playerModels == null) {
             playerModels = new ArrayList<>();
@@ -90,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sortByScore() {
-        if (playerModels != null) {
+        if (playerModels != null && playerModels.size()>1) {
             Collections.sort(playerModels, new Comparator<PlayerModel>() {
                 @Override
                 public int compare(PlayerModel o1, PlayerModel o2) {
@@ -111,27 +133,33 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showDialogThemLop() {
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.custom_leader_board_dialog);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.show();
-        dialog.setCanceledOnTouchOutside(true);
+    private void showPopupWindow(View view) {
+        // inflate the layout of the popup window
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.popup_leader_board, null);
 
-        tvNumber = dialog.findViewById(R.id.tvNumber);
-        tvPlayerName1 = dialog.findViewById(R.id.tvPlayerName1);
-        tvPlayerScore1 = dialog.findViewById(R.id.tvPlayerScore1);
-        recycler = dialog.findViewById(R.id.recycler);
-        btnCancel = dialog.findViewById(R.id.btnCancel);
+        // create the popup window
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true; // lets taps outside the popup also dismiss it
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
 
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+        tvNumber = popupView.findViewById(R.id.tvNumber);
+        tvPlayerScore1 = popupView.findViewById(R.id.tvPlayerScore1);
+        tvPlayerName1 = popupView.findViewById(R.id.tvPlayerName1);
+        recycler = popupView.findViewById(R.id.recycler);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recycler.setLayoutManager(llm);
+        loadHighScore();
         setAdapter();
-
-        btnCancel.setOnClickListener(new View.OnClickListener() {
+        btnBack = popupView.findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
+                popupWindow.dismiss();
             }
         });
     }

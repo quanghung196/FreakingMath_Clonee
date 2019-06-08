@@ -26,7 +26,8 @@
         android:layout_height="200dp" />
 
     <ImageView
-        android:onClick="btnLeaderBoard"
+        android:id="@+id/imgLeaderBoard"
+        android:onClick="imgLeaderBoard"
         android:background="@drawable/ic_leader_board"
         android:layout_gravity="center"
         android:layout_width="wrap_content"

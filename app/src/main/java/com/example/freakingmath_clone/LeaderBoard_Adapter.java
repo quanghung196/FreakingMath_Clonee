@@ -28,9 +28,27 @@ public class LeaderBoard_Adapter extends RecyclerView.Adapter<LeaderBoard_Adapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         final PlayerModel playerModel = playerModels.get(position);
-        viewHolder.tvNumber.setText("" + 1);
+        if(position < 3){
+            viewHolder.tvNumber.setText("");
+        }
         viewHolder.tvPlayerName1.setText(playerModel.getPlayerName());
         viewHolder.tvPlayerScore1.setText(playerModel.getPlayerScore() + "");
+
+        switch (position + 1) {
+            case 1:
+                viewHolder.tvNumber.setBackgroundResource(R.drawable.icon_gold_medal_24);
+                break;
+            case 2:
+                viewHolder.tvNumber.setBackgroundResource(R.drawable.icon_silver_medal_24);
+                break;
+            case 3:
+                viewHolder.tvNumber.setBackgroundResource(R.drawable.icon_bronze_medal_24);
+                break;
+            default:
+                viewHolder.tvNumber.setBackgroundResource(0);
+                viewHolder.tvNumber.setText((position + 1) + "");
+                break;
+        }
 
     }
 
